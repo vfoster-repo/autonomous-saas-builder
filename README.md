@@ -148,3 +148,7 @@ This was a first pass at autonomous SaaS construction. If I ran it again:
 - Email: victorfoster@hotmail.com
 
 ---
+
+## License
+
+MIT — see [LICENSE](LICENSE)
