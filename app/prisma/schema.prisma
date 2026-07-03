@@ -1,0 +1,205 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  password              String
+  name                  String?
+  role                  String    @default("user")
+  operatorType          String?
+  onboardingCompleted   Boolean   @default(false)
+  loginCount            Int       @default(0)
+  twoFactorEnabled      Boolean   @default(false)
+  twoFactorSecret       String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  settings              UserSettings?
+  trips                 Trip[]
+  expenses              Expense[]
+  subscription          Subscription?
+  passwordResetTokens   PasswordResetToken[]
+  twoFactorOtps         TwoFactorOtp[]
+  clarifications        DataClarification[]
+  clarificationPatterns ClarificationPattern[]
+  supportTickets        SupportTicket[]
+  customFieldSchemas    CustomFieldSchema[]
+}
+
+model UserSettings {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  truckYear             String?
+  truckMake             String?
+  truckModel            String?
+  truckVin              String?
+  trailerType           String?
+  avgMilesPerMonth      Float    @default(10000)
+  avgDeadheadPct        Float    @default(15)
+  avgFuelCostPerGallon  Float    @default(3.55)
+  avgMpg                Float    @default(7.2)
+  truckPayment          Float    @default(0)
+  trailerPayment        Float    @default(0)
+  insurance             Float    @default(0)
+  otherFixed            Float    @default(0)
+  repairMaintenance     Float    @default(0.198)
+  tires                 Float    @default(0.047)
+  tolls                 Float    @default(0.038)
+  permits               Float    @default(0.009)
+  truckReservePerMile   Float    @default(0.05)
+  trailerReservePerMile Float    @default(0.02)
+  federalBracket        String?
+  federalCustomRate     Float?
+  stateRate             Float    @default(0)
+  expenseCategories     Json     @default("[\"Fuel\",\"Maintenance\",\"Tires\",\"Tolls\",\"Permits\",\"Insurance\",\"Truck Payment\",\"Trailer Payment\",\"Driver Pay\",\"Taxes\",\"Other\"]")
+  widgetLayout          Json     @default("[]")
+  theme                 String   @default("dark")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Trip {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date          DateTime
+  origin        String
+  destination   String
+  miles         Float
+  deadheadMiles Float    @default(0)
+  grossPay      Float
+  broker        String?
+  staged        Boolean  @default(false)
+  customFields  Json     @default("{}")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId, date])
+}
+
+model Expense {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date         DateTime
+  category     String
+  amount       Float
+  description  String?
+  receiptUrl   String?
+  staged       Boolean  @default(false)
+  customFields Json     @default("{}")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId, date])
+}
+
+model Subscription {
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status               String    @default("inactive")
+  plan                 String?
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean   @default(false)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model TwoFactorOtp {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  otp       String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model CustomFieldSchema {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entityType String
+  fieldKey   String
+  fieldLabel String
+  fieldType  String
+  required   Boolean  @default(false)
+  position   Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, entityType, fieldKey])
+}
+
+model DataClarification {
+  id         String                  @id @default(cuid())
+  userId     String
+  user       User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceType String
+  sourceRef  String?
+  status     String                  @default("pending")
+  title      String
+  questions  ClarificationQuestion[]
+  createdAt  DateTime                @default(now())
+  updatedAt  DateTime                @updatedAt
+
+  @@index([userId, status])
+}
+
+model ClarificationQuestion {
+  id              String            @id @default(cuid())
+  clarificationId String
+  clarification   DataClarification @relation(fields: [clarificationId], references: [id], onDelete: Cascade)
+  order           Int
+  questionText    String
+  questionType    String
+  options         Json?
+  answer          String?
+  answeredAt      DateTime?
+  createdAt       DateTime          @default(now())
+}
+
+model ClarificationPattern {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rawText    String
+  resolvedTo String
+  entityType String
+  fieldKey   String
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, rawText, entityType, fieldKey])
+}
+
+model SupportTicket {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject   String
+  message   String
+  status    String   @default("open")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
