@@ -2,10 +2,6 @@
 
 A 7-agent autonomous build pipeline that constructed a SaaS prototype over ~150 cycles — each cycle planning a feature, writing the code, running QA, and self-deploying — without manual coding.
 
-**[→ Live prototype demo](https://truckerflow.vfoster.pro/truckerflow-v7)** · **[→ Portfolio page](https://truckerflow.vfoster.pro)**
-
-> Demo login: `demo@truckerflow.com` / `demo`
-
 ---
 
 ## What This Is
@@ -142,4 +138,13 @@ This was a first pass at autonomous SaaS construction. If I ran it again:
 
 ---
 
-[Portfolio](https://vfoster.pro) · [Live Prototype](https://truckerflow.vfoster.pro/truckerflow-v7) · [Project Page](https://truckerflow.vfoster.pro)
+---
+
+## Author
+
+**Victor Foster**
+- GitHub: [@vfoster-repo](https://github.com/vfoster-repo)
+- LinkedIn: [Victor Foster](https://linkedin.com/in/vfoster-connect)
+- Email: victorfoster@hotmail.com
+
+---
