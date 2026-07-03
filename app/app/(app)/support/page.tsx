@@ -10,7 +10,7 @@ export default function SupportPage() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
-    await fetch('/truckerflow-v7/api/support', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ subject, message }) })
+    await fetch('/api/support', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ subject, message }) })
     setSent(true)
   }
 

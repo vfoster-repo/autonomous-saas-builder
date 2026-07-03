@@ -41,7 +41,7 @@ export default function CalculatorPage() {
 
   // Load from settings on mount
   useEffect(() => {
-    fetch('/truckerflow-v7/api/settings').then(r => r.json()).then(s => {
+    fetch('/api/settings').then(r => r.json()).then(s => {
       if (!s) return
       if (s.avgMilesPerMonth) setMiles(s.avgMilesPerMonth)
       if (s.avgFuelCostPerGallon) setFuelCostPerGallon(s.avgFuelCostPerGallon)

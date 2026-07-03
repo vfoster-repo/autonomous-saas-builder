@@ -15,7 +15,7 @@ export default function SignupPage() {
     e.preventDefault()
     setError('')
     setLoading(true)
-    const res = await fetch('/truckerflow-v7/api/auth/signup', {
+    const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password }),

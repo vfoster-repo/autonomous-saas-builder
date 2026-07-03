@@ -18,7 +18,7 @@ export default function ExpensesPage() {
 
   const load = useCallback(async () => {
     setLoading(true)
-    const res = await fetch(`/truckerflow-v7/api/expenses?page=${page}&limit=50`)
+    const res = await fetch(`/api/expenses?page=${page}&limit=50`)
     const data = await res.json()
     setExpenses(data.expenses ?? [])
     setTotal(data.total ?? 0)
@@ -28,14 +28,14 @@ export default function ExpensesPage() {
   useEffect(() => { load() }, [load])
 
   async function save() {
-    const res = await fetch('/truckerflow-v7/api/expenses', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    const res = await fetch('/api/expenses', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...form, amount: +form.amount }) })
     if (res.ok) { setShowForm(false); setForm({ date: '', category: 'Fuel', amount: '', description: '' }); load() }
   }
 
   async function del(id: string) {
     if (!confirm('Delete this expense?')) return
-    await fetch(`/truckerflow-v7/api/expenses/${id}`, { method: 'DELETE' })
+    await fetch(`/api/expenses/${id}`, { method: 'DELETE' })
     load()
   }
 

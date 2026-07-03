@@ -16,7 +16,7 @@ export default function TripsPage() {
 
   const load = useCallback(async () => {
     setLoading(true)
-    const res = await fetch(`/truckerflow-v7/api/trips?page=${page}&limit=50`)
+    const res = await fetch(`/api/trips?page=${page}&limit=50`)
     const data = await res.json()
     setTrips(data.trips ?? [])
     setTotal(data.total ?? 0)
@@ -26,14 +26,14 @@ export default function TripsPage() {
   useEffect(() => { load() }, [load])
 
   async function save() {
-    const res = await fetch('/truckerflow-v7/api/trips', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    const res = await fetch('/api/trips', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...form, miles: +form.miles, deadheadMiles: +form.deadheadMiles || 0, grossPay: +form.grossPay }) })
     if (res.ok) { setShowForm(false); setForm({ date: '', origin: '', destination: '', miles: '', deadheadMiles: '', grossPay: '', broker: '' }); load() }
   }
 
   async function del(id: string) {
     if (!confirm('Delete this trip?')) return
-    await fetch(`/truckerflow-v7/api/trips/${id}`, { method: 'DELETE' })
+    await fetch(`/api/trips/${id}`, { method: 'DELETE' })
     load()
   }
 

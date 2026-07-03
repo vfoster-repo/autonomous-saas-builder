@@ -10,7 +10,7 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
-    fetch('/truckerflow-v7/api/settings').then(r => r.json()).then(s => { if (s) setSettings(s) })
+    fetch('/api/settings').then(r => r.json()).then(s => { if (s) setSettings(s) })
   }, [])
 
   const set = (key: string, val: unknown) => setSettings(s => ({ ...s, [key]: val }))
@@ -20,7 +20,7 @@ export default function SettingsPage() {
   async function save() {
     if (isDemo) return
     setSaving(true)
-    await fetch('/truckerflow-v7/api/settings', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(settings) })
+    await fetch('/api/settings', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(settings) })
     setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 

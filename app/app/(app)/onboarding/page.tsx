@@ -41,7 +41,7 @@ export default function OnboardingPage() {
 
   async function finish() {
     setSaving(true)
-    await fetch('/truckerflow-v7/api/settings', {
+    await fetch('/api/settings', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

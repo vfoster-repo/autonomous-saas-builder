@@ -12,7 +12,7 @@ export default function ReportsPage() {
 
   useEffect(() => {
     setLoading(true)
-    fetch(`/truckerflow-v7/api/reports/summary?year=${year}`)
+    fetch(`/api/reports/summary?year=${year}`)
       .then(r => r.json()).then(d => { setData(d); setLoading(false) })
   }, [year])
 
