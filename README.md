@@ -8,7 +8,7 @@ A 7-agent autonomous build pipeline that constructed a SaaS prototype over ~150 
 
 This is an experiment in autonomous software construction. Instead of writing the app by hand, I designed a pipeline where seven Claude Code agents collaborate in sequence — each with a narrow, scoped role — and the loop repeats, adding one feature per cycle.
 
-The app it produced — TruckerFlow, a trucking business management tool — is the **evidence the pipeline works**, not the project itself. The pipeline is the project.
+The app it produced — [TruckerFlow](https://truckerflow.vfoster.pro/), a trucking business management tool — is the **evidence the pipeline works**, not the project itself. The pipeline is the project.
 
 **This is a prototype and proof of concept.** The app has rough edges and bugs; the goal was to answer a specific question: *can a well-structured agentic pipeline produce genuinely usable software — not just scaffolding or toy code?*
 
